@@ -16,6 +16,9 @@ body {
     align-items: center;
     width: 100vw;
     min-height: 100vh;
+    &.col {
+        flex-direction: column;
+    }
 }
 
 .border {
@@ -75,5 +78,23 @@ body {
             padding: 5px;
             font-size: 12px;
         }
+    }
+}
+
+.m-3 {
+    margin: 30px;
+}
+
+.nice-border {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid aquamarine;
+    display: inline-block;
+    cursor: pointer;
+    &:hover{
+        border-color: magenta;
+    }
+    span {
+        margin: 0;
     }
 }

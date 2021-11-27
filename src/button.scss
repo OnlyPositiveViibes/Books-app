@@ -1,4 +1,7 @@
 $color: #0cf;
+    $color-red: crimson;
+
+
 .button {
     display: inline-block;
     padding: .75rem 1.25rem;
@@ -14,6 +17,7 @@ $color: #0cf;
     border: none;
     outline: none;
     cursor: pointer;
+    margin: 0.5rem;
     &:after {
         content: '';
         position: absolute;
@@ -24,6 +28,9 @@ $color: #0cf;
         background-color: $color;
         border-radius: 10rem;
         z-index: -2;
+    }
+    &.red:after{
+        background-color: $color-red;
     }
     &:before {
         content: '';
@@ -36,6 +43,9 @@ $color: #0cf;
         transition: all .3s;
         border-radius: 10rem;
         z-index: -1;
+    }
+    &.red:before{
+        background-color: darken($color, 15%);;
     }
     &:hover {
         color: #fff;
