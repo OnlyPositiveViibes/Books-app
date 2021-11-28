@@ -1,7 +1,7 @@
 $color: #0cf;
-    $color-red: crimson;
-
-
+$color-red: crimson;
+$pink: pink;
+$yellow: yellow;
 .button {
     display: inline-block;
     padding: .75rem 1.25rem;
@@ -29,8 +29,17 @@ $color: #0cf;
         border-radius: 10rem;
         z-index: -2;
     }
-    &.red:after{
+    &.red:after {
         background-color: $color-red;
+    }
+    &.pink:after {
+        background-color: $pink;
+    }
+    &.yellow:after {
+        background-color: $yellow;
+    }
+    &.green:after {
+        background-color: $d_green;
     }
     &:before {
         content: '';
@@ -44,8 +53,17 @@ $color: #0cf;
         border-radius: 10rem;
         z-index: -1;
     }
-    &.red:before{
-        background-color: darken($color, 15%);;
+    &.red:before {
+        background-color: darken($color-red, 15%);
+    }
+    &.pink:before {
+        background-color: darken($pink, 15%);
+    }
+    &.yellow:before {
+        background-color: darken($yellow, 15%);
+    }
+    &.green:before {
+        background-color: darken($d_green, 15%);
     }
     &:hover {
         color: #fff;
