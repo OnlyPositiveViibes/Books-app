@@ -108,6 +108,7 @@ body {
 }
 
 .domino {
+    position: relative;
     &__wrap {
         display: flex;
         justify-content: center;
@@ -117,7 +118,7 @@ body {
         width: 100%;
     }
     &__header {
-        height: 55px;
+        height: 85px;
         background-color: $d_light;
         width: 100%;
         display: flex;
@@ -129,6 +130,23 @@ body {
             letter-spacing: 3px;
             text-transform: uppercase;
             margin: 0 40px;
+        }
+        &__sort {
+            padding: 0 10px;
+            h2 {
+                color: $d_red;
+                font-size: 20px;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                margin: 0 13px;
+            }
+            select {
+                margin: 0 13px;
+                outline: none;
+                border: 2px solid $d_green;
+                font-size: 20px;
+                border-radius: 4px;
+            }
         }
     }
     &__create {
@@ -157,6 +175,46 @@ body {
             color: $d_green;
         }
     }
+    &__modal {
+        position: absolute;
+        top: 40vh;
+        z-index: 5000;
+    }
+    &__edit {
+        background-color: $d_light;
+        width: 100%;
+        border: 5px solid $d_green;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px 100px;
+        position: relative;
+        &__close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: $d_red;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        &__domino {
+            padding: 11px;
+        }
+        &__selects {
+            select {
+                margin: 0 13px;
+                outline: none;
+                border: 2px solid $d_green;
+                font-size: 26px;
+                border-radius: 4px;
+            }
+        }
+        h2 {
+            margin: 0;
+            color: $d_green;
+        }
+    }
     &__bag {
         width: 100%;
         display: flex;
@@ -166,6 +224,7 @@ body {
         background-color: $d_brown;
         .plate {
             margin: 14px;
+            cursor: pointer;
         }
     }
 }

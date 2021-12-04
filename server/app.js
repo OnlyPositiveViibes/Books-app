@@ -99,6 +99,84 @@ app.post('/dominos/add', (req, res) => {
     })
 });
 
+// UPDATE table_name
+// SET column1 = value1, column2 = value2, ...
+// WHERE condition;
+app.put('/dominos/update/:id', (req, res) => {
+    const sql = `
+        UPDATE dices
+        SET left_side = ?, right_side = ?
+        WHERE id = ?
+    `;
+    con.query(sql, [req.body.left, req.body.right, req.params.id], err => {
+        if (err) throw err;
+        console.log("1 record updated");
+    });
+    res.json({
+        msg: 'OK',
+    })
+
+});
+
+// DELETE FROM table_name WHERE condition;
+app.delete('/dominos/delete/:id', (req, res) => {
+    const sql = `
+        DELETE FROM dices
+        WHERE id = ?
+    `;
+    con.query(sql, [req.params.id], err => {
+        if (err) throw err;
+        console.log("1 record deleted");
+    });
+    res.json({
+        msg: 'OK',
+    })
+});
+
+// SELECT column1, column2, ...
+// FROM table_name
+// ORDER BY column1, column2, ... ASC|DESC;
+
+
+app.get('/dominos/sort/:sort', (req, res) => {
+    let sql = `
+        SELECT * 
+        FROM dices
+    `;
+    let orderSQL = '';
+    switch (req.params.sort) {
+        case 'LA':
+            orderSQL = 'ORDER BY left_side ASC';
+            break;
+        case 'LD':
+            orderSQL = 'ORDER BY left_side DESC';
+            break;
+        case 'RA':
+            orderSQL = 'ORDER BY right_side ASC';
+            break;
+        case 'RD':
+            orderSQL = 'ORDER BY right_side DESC';
+            break;
+        case 'BA':
+            orderSQL = 'ORDER BY (left_side + right_side) ASC';
+            break;
+        case 'BD':
+            orderSQL = 'ORDER BY (left_side + right_side) DESC';
+            break;
+        default:
+    }
+    sql += orderSQL;
+    con.query(sql, (err, result) => {
+        if (err) {
+            throw err;
+        }
+        res.json({
+            msg: 'OK',
+            dominos: result
+        })
+    })
+})
+
 
 app.get('/dominos', (req, res) => {
     const sql = `
