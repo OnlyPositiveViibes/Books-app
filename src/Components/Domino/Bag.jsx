@@ -2,7 +2,7 @@ import Plate from "./Plate";
 
 function Bag({plates, showModal}) {
 
-    console.log(plates);
+  
 
     return (
         <div className="domino__bag">
