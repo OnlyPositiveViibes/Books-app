@@ -1,18 +1,16 @@
-import {useParams} from "react-router";
+import { useParams } from "react-router";
 
 function Behemoths() {
 
     const {count} = useParams();
 
 
-
     if(typeof count === 'undefined') {
         return (
-            <h2>No hipos</h2>
+            <h2>No Behemoths</h2>
         )
     }
-
-    return(
+    return (
         <h2>{count} Behemoths</h2>
     )
 }

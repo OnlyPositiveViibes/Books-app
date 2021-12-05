@@ -13,7 +13,6 @@ function Page() {
                 <Route path="tigers" element={<h2>101 Tigeres</h2>}></Route>
                 <Route path="lions" element={<h2>254 Lions</h2>}></Route>
                 <Route path="behemoths" element={<Behemoths></Behemoths>}></Route>
-
                 <Route path="behemoths/:count" element={<Behemoths></Behemoths>}></Route>
             </Route>
             <Route path="/america" element={<America></America>}>

@@ -1,21 +1,18 @@
-import { Children, useState } from "react";
-import Children1 from "./Components/Context/Children1";
-import All from "./Components/Contexts/All";
+import { useState } from "react";
+import Children1 from "./Components/Contex/Children1";
+import All from "./Contexts/All";
 
 function App() {
 
-    const [input1, setInput] = useState('')
-    const [input2, setInput2] = useState('')
+    const [input1, setInput1] = useState('');
+    const [input2, setInput2] = useState('');
 
-
-    return(
+    return (
         <All.Provider value={input2}>
         <div className="App col">
-            <h1>My name is Jeff</h1>
-        <input type="text" onChange={e => 
-            setInput(e.target.value)} value={input1} />
-             <input type="text" onChange={e => 
-            setInput2(e.target.value)} value={input2} />
+            <h1>Hello,</h1>
+            <input type="text" onChange={e => setInput1(e.target.value)} value={input1}></input>
+            <input type="text" onChange={e => setInput2(e.target.value)} value={input2}></input>
             <Children1 say={input1}></Children1>
         </div>
         </All.Provider>

@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import SuperLink from "./SuperLink";
 
 function Africa() {
@@ -6,10 +6,11 @@ function Africa() {
         <div className="africa">
             <Outlet></Outlet>
             <nav>
-                <SuperLink to="tigers" children="Tigers">Tigers</SuperLink>
-                <SuperLink to="lions" children="Lions">Lions</SuperLink>
-                <SuperLink to="behemoths" children="Behemoths">Behemoths</SuperLink>
-            </nav> 
+                <SuperLink to="tigers" children="Tigers"></SuperLink>
+                <SuperLink to="lions" children="Lions"></SuperLink>
+                <SuperLink to="behemoths" children="Behemoths"></SuperLink>
+            </nav>
+            
         </div>
     )
 }
