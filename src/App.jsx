@@ -1,59 +1,58 @@
-import { Slider } from "@mui/material";
-import Box from '@mui/material/Box'
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Book from "./Components/Books/Book";
-import List from "./Components/Books/List";
-import NotFound from "./Components/Books/NotFound";
-import Books from "./Contexts/Books";
+import { useReducer, useState } from "react";
+import calculatorReducer from "./Reducers/calculatorReducer";
+import { actionAdd, actionDiff, actionDiv, actionMult } from "./Actions/calculator"
 
 function App() {
 
-    const [books, setBooks] = useState({ showBooks: [], masterBooks: [] })
+    // const [books, setBooks] = useState({ showBooks: [], masterBooks: [] })
+    // const [books, dispatch] = useReducer(reducer, { showBooks: [], masterBooks: [] });
 
-    useEffect(() => {
+    // const [counter, counterDispatch] = useReducer(counterReducer, 0);
 
-        axios.get('https://in3.dev/knygos/')
-            .then(res => {
-                setBooks({
-                    showBooks: res.data,
-                    masterBooks: res.data
-                })
-            });
+    const [d1, setD1] = useState(0);
+    const [d2, setD2] = useState(0);
+    const [calculator, calculatorDispatch] = useReducer(calculatorReducer, 0);
 
-        // fetch('https://in3.dev/knygos/')
-        // .then(res => res.json())
-        // .then(data => {
-        //     setBooks({
-        //         showBooks: data,
-        //         masterBooks: data
-        //     })
-        // });
-
-    }, [])
-
-
+    const sum = () => {
+        calculatorDispatch(
+            actionAdd({ d1: d1, d2: d2 })
+        )
+    }
+    const diff = () => {
+        calculatorDispatch(
+            actionDiff({ d1: d1, d2: d2 })
+        )
+    }
+    const mult = () => {
+        calculatorDispatch(
+            actionMult({ d1: d1, d2: d2 })
+        )
+    }
+    const div = () => {
+        calculatorDispatch(
+            actionDiv({ d1: d1, d2: d2 })
+        )
+    }
     return (
-        <Books.Provider value={books}>
-            <div className="App col top">
-                <div className="books">
-                    <h1>Knygynas</h1>
+        <div className="App col top">
+            <div className="calc">
+                <h1>Skaičiuotuvas</h1>
+                <div className="calc__in">
+                    <input type="text" value={d1} onChange={e => setD1(e.target.value)} />
+                    <input type="text" value={d2} onChange={e => setD2(e.target.value)} />
+                </div>
+                <div className="calc__res">
+                    {calculator}
 
-                    <Box width={300}>
-                        <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
-                    </Box>
-
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<List></List>}></Route>
-                            <Route path="/book/:id" element={<Book></Book>}></Route>
-                            <Route path="*" element={<NotFound></NotFound>}></Route>
-                        </Routes>
-                    </BrowserRouter>
+                </div>
+                <div className="calc__butt">
+                    <button className="button" onClick={sum}>+</button>
+                    <button className="button" onClick={diff}>-</button>
+                    <button className="button" onClick={mult}>*</button>
+                    <button className="button" onClick={div}>/</button>
                 </div>
             </div>
-        </Books.Provider>
+        </div>
     )
 }
 

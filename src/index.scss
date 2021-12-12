@@ -352,6 +352,21 @@ body {
             }
         }
     }
+    &__price-slider {
+        width: 300px;
+        margin: 20px;
+        border: 1px solid $d_green;
+        padding: 10px;
+        &__value {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            span {
+                margin: 0 0 20px 0;
+                color: $d_red;
+            }
+        }
+    }
 }
 
 .btn-shine {
@@ -415,5 +430,25 @@ body {
     }
     100% {
         background-position: 180px;
+    }
+}
+
+.calc {
+    &__butt {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__in {
+        input {
+            margin: 5px;
+        }
+    }&__res {
+        font-size: 30px;
+        background-color: aqua;
+        color: white;
+        padding: 10px;
+        margin:10px;
+        min-width: 400px;
     }
 }
