@@ -1,58 +1,76 @@
-import { useReducer, useState } from "react";
-import calculatorReducer from "./Reducers/calculatorReducer";
-import { actionAdd, actionDiff, actionDiv, actionMult } from "./Actions/calculator"
+import axios from "axios";
+import { useEffect, useReducer, useState } from "react";
+import { actionGetAllFromServer, actionSelectorDidChanged } from "./Actions/books";
+import BooksContext from "./Contexts/BooksContext";
+import List from "./Components/Books2/List";
+import NotFound from "./Components/Books2/NotFound";
+import booksReducer from "./Reducers/booksReducer";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Sort from "./Components/Books2/Sort";
+import SelectorsContext from "./Contexts/SelectorsContext";
+import TypesContext from "./Contexts/TypesContext";
+import Filter from "./Components/Books2/Filter";
+import Pager from "./Components/Books2/Pager";
+export const BOOKS_PER_PAGE = 2;
 
 function App() {
 
-    // const [books, setBooks] = useState({ showBooks: [], masterBooks: [] })
-    // const [books, dispatch] = useReducer(reducer, { showBooks: [], masterBooks: [] });
+    
+    const [books, dispachBooks] = useReducer(booksReducer, { 
+        showBooks: [],
+        masterBooks: [],
+        showPages: [] 
+    });
+    const [selectors, setSelectors] = useState({
+        sort: '',
+        filter: 0,
+        page: 0
+    });
+    const [types, setTypes] = useState([]);
 
-    // const [counter, counterDispatch] = useReducer(counterReducer, 0);
+    useEffect(() => {
+        dispachBooks(actionSelectorDidChanged(selectors));
+    }, [selectors])
 
-    const [d1, setD1] = useState(0);
-    const [d2, setD2] = useState(0);
-    const [calculator, calculatorDispatch] = useReducer(calculatorReducer, 0);
+    useEffect(() => {
+        axios.get('https://in3.dev/knygos/')
+            .then(res => {
+                dispachBooks(actionGetAllFromServer(res.data))
+            })
+    }, []);
 
-    const sum = () => {
-        calculatorDispatch(
-            actionAdd({ d1: d1, d2: d2 })
-        )
-    }
-    const diff = () => {
-        calculatorDispatch(
-            actionDiff({ d1: d1, d2: d2 })
-        )
-    }
-    const mult = () => {
-        calculatorDispatch(
-            actionMult({ d1: d1, d2: d2 })
-        )
-    }
-    const div = () => {
-        calculatorDispatch(
-            actionDiv({ d1: d1, d2: d2 })
-        )
-    }
+    useEffect(() => {
+        axios.get('https://in3.dev/knygos/types/')
+            .then(res => {
+                setTypes(res.data);
+            })
+    }, []);
+
+
     return (
-        <div className="App col top">
-            <div className="calc">
-                <h1>Skaičiuotuvas</h1>
-                <div className="calc__in">
-                    <input type="text" value={d1} onChange={e => setD1(e.target.value)} />
-                    <input type="text" value={d2} onChange={e => setD2(e.target.value)} />
-                </div>
-                <div className="calc__res">
-                    {calculator}
+        <BooksContext.Provider value={books}>
+            <SelectorsContext.Provider value={setSelectors}>
+                <TypesContext.Provider value={types}>
+                    <BrowserRouter>
+                        <div className="App col top">
+                            <div className="books">
+                                <h1>Knygynas</h1>
+                                <div className="books__selectors">
+                                    <Sort></Sort>
+                                    <Filter></Filter>
+                                    <Pager pages={books.showPages}></Pager>
+                                </div>
 
-                </div>
-                <div className="calc__butt">
-                    <button className="button" onClick={sum}>+</button>
-                    <button className="button" onClick={diff}>-</button>
-                    <button className="button" onClick={mult}>*</button>
-                    <button className="button" onClick={div}>/</button>
-                </div>
-            </div>
-        </div>
+                                <Routes>
+                                    <Route path="/" element={<List></List>}></Route>
+                                    <Route path="*" element={<NotFound></NotFound>}></Route>
+                                </Routes>
+                            </div>
+                        </div>
+                    </BrowserRouter>
+                </TypesContext.Provider>
+            </SelectorsContext.Provider>
+        </BooksContext.Provider>
     )
 }
 

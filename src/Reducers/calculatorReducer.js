@@ -1,11 +1,9 @@
 import { ADD, DIFF, MULT, DIV } from "../Constants/actions";
 
-
 function calculatorReducer(state, action) {
     let calculator;
-    action.payload.d1 = parseInt(action.payload.d1)
-    action.payload.d2 = parseInt(action.payload.d2)
-
+    action.payload.d1 = parseInt(action.payload.d1);
+    action.payload.d2 = parseInt(action.payload.d2);
     switch (action.type) {
         case ADD:
             calculator = action.payload.d1 + action.payload.d2;
@@ -18,7 +16,7 @@ function calculatorReducer(state, action) {
             break;
         case DIV:
             if (action.payload.d2 === 0) {
-                calculator = "Error";
+                calculator = 'Error';
             } else {
                 calculator = action.payload.d1 / action.payload.d2;
             }
@@ -27,7 +25,6 @@ function calculatorReducer(state, action) {
             calculator = 0;
     }
     return calculator;
-
 }
 
 export default calculatorReducer;

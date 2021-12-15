@@ -367,6 +367,17 @@ body {
             }
         }
     }
+    &__selectors {
+        width: 90%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid $d_brown;
+        &__sort {
+            padding: 10px;
+        }
+    }
 }
 
 .btn-shine {
@@ -443,12 +454,13 @@ body {
         input {
             margin: 5px;
         }
-    }&__res {
+    }
+    &__res {
         font-size: 30px;
-        background-color: aqua;
+        background-color: darkcyan;
         color: white;
-        padding: 10px;
-        margin:10px;
+        padding: 10px 30px;
+        margin: 10px;
         min-width: 400px;
     }
 }
