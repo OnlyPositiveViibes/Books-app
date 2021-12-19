@@ -23,4 +23,4 @@ function Pager({pages}) {
     )
 }
 
-export default Pager;
+export default Pager;s

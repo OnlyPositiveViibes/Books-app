@@ -1,21 +1,22 @@
 import axios from "axios";
-import { useEffect, useReducer, useState } from "react";
-import { actionGetAllFromServer, actionSelectorDidChanged } from "./Actions/books";
+import { useEffect, useReducer, useRef, useState } from "react";
+import { actionGetAllFromServer, actionGetAllLikes, actionGetAllLikesFromServer, actionSelectorDidChanged } from "./Actions/books";
 import BooksContext from "./Contexts/BooksContext";
 import List from "./Components/Books2/List";
 import NotFound from "./Components/Books2/NotFound";
 import booksReducer from "./Reducers/booksReducer";
+import likesReducer from "./Reducers/likesReducer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sort from "./Components/Books2/Sort";
 import SelectorsContext from "./Contexts/SelectorsContext";
 import TypesContext from "./Contexts/TypesContext";
 import Filter from "./Components/Books2/Filter";
 import Pager from "./Components/Books2/Pager";
-export const BOOKS_PER_PAGE = 2;
+import LikesContext from "./Contexts/likesContex";
+export const BOOKS_PER_PAGE = 4;
 
 function App() {
-
-    
+   
     const [books, dispachBooks] = useReducer(booksReducer, { 
         showBooks: [],
         masterBooks: [],
@@ -27,6 +28,10 @@ function App() {
         page: 0
     });
     const [types, setTypes] = useState([]);
+
+    const [likes, dispachLikes] = useReducer(likesReducer, [])
+
+    const lastUpdate = useRef(0);
 
     useEffect(() => {
         dispachBooks(actionSelectorDidChanged(selectors));
@@ -46,11 +51,48 @@ function App() {
             })
     }, []);
 
+    // sync server ==> client
+    useEffect(() => {
+        setTimeout(()=> {
+            axios.get('http://localhost:3003/likes')
+            .then(res => {
+                dispachLikes(actionGetAllLikesFromServer(res.data))
+            })
+        }, 3000);
+    }, [])
+
+
+
+    useEffect(() => {
+        dispachLikes(actionGetAllLikes());
+    }, []);
+
+    // sync client ==> server
+    useEffect(() => {
+        setInterval(()=> {
+            const data = {
+                time: localStorage.getItem('likedTime'),
+                likes: localStorage.getItem('likedBooks')
+            }
+
+            if (data.time !== null 
+                && data.likes !== null
+                && lastUpdate.current !== data.time) {
+                axios.put('http://localhost:3003/update-likes', data);
+                lastUpdate.current = data.time;
+            }
+        },5000)
+    }, []);
+
 
     return (
         <BooksContext.Provider value={books}>
             <SelectorsContext.Provider value={setSelectors}>
                 <TypesContext.Provider value={types}>
+                    <LikesContext.Provider value={{
+                        likes:likes, 
+                        dispach:dispachLikes
+                        }}>
                     <BrowserRouter>
                         <div className="App col top">
                             <div className="books">
@@ -68,6 +110,7 @@ function App() {
                             </div>
                         </div>
                     </BrowserRouter>
+                    </LikesContext.Provider>
                 </TypesContext.Provider>
             </SelectorsContext.Provider>
         </BooksContext.Provider>

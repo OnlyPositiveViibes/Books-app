@@ -15,7 +15,7 @@ const con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "domino"
+    database: "bk"
 });
 
 con.connect(function(err) {
@@ -29,86 +29,17 @@ app.get('/', (req, res) => {
     res.send('Ate')
 })
 
-app.get('/labas', (req, res) => {
-    res.send('Sveikutis, Zuikutis')
-})
-
-app.get('/labas/jonai', (req, res) => {
-    res.send('Sveikutis, jonai')
-})
-
-app.get('/labas/:vardas', (req, res) => {
-    res.send(`Sveikutis arba Sveikutė, ${req.params.vardas}`)
-})
-
-app.get('/sum/:d1/:d2', (req, res) => {
-    res.send(`Atsakymas: ${parseInt(req.params.d1) + parseInt(req.params.d2)}`)
-})
-
-app.get('/diff/:d1/:d2', (req, res) => {
-    res.send(`Atsakymas: ${parseInt(req.params.d1) - parseInt(req.params.d2)}`)
-})
-
-
-app.post('/calculator', (req, res) => {
-    const d1 = parseFloat(req.body.d1);
-    const d2 = parseFloat(req.body.d2);
-    let answer;
-    let errMsg;
-    switch (req.body.action) {
-        case '+':
-            answer = d1 + d2;
-            break;
-        case '-':
-            answer = d1 - d2;
-            break;
-        case 'X':
-            answer = d1 * d2;
-            break;
-        case '/':
-            if (0 === d2) {
-                errMsg = 'No way';
-            } else {
-                answer = d1 / d2;
-            }
-            break;
-        default:
-            errMsg = 'WTF?';
-    }
-    res.json({
-        answer: answer,
-        errMsg: errMsg
-    })
-})
-
-
-
-app.post('/dominos/add', (req, res) => {
-    const sql = `
-        INSERT INTO
-        dices
-        (left_side, right_side)
-        VALUES (?, ?)
-    `;
-    con.query(sql, [req.body.left, req.body.right], err => {
-        if (err) throw err;
-        console.log("1 record inserted");
-    });
-    res.json({
-        msg: 'OK',
-    })
-});
 
 // UPDATE table_name
 // SET column1 = value1, column2 = value2, ...
 // WHERE condition;
-app.put('/dominos/update/:id', (req, res) => {
+app.put('/update-likes', (req, res) => {
     const sql = `
-        UPDATE dices
-        SET left_side = ?, right_side = ?
-        WHERE id = ?
+        UPDATE likes
+        SET time = ?, likes = ?
+        WHERE id = 24
     `;
-    con.query(sql, [req.body.left, req.body.right, req.params.id], err => {
+    con.query(sql, [req.body.time, req.body.likes], err => {
         if (err) throw err;
         console.log("1 record updated");
     });
@@ -118,97 +49,11 @@ app.put('/dominos/update/:id', (req, res) => {
 
 });
 
-// DELETE FROM table_name WHERE condition;
-app.delete('/dominos/delete/:id', (req, res) => {
+app.get('/likes', (req, res) => {
     const sql = `
-        DELETE FROM dices
-        WHERE id = ?
-    `;
-    con.query(sql, [req.params.id], err => {
-        if (err) throw err;
-        console.log("1 record deleted");
-    });
-    res.json({
-        msg: 'OK',
-    })
-});
-
-// SELECT column1, column2, ...
-// FROM table_name
-// ORDER BY column1, column2, ... ASC|DESC;
-
-app.get('/dominos/sort/:sort', (req, res) => {
-    let sql = `
-        SELECT * 
-        FROM dices
-    `;
-    let orderSQL = '';
-    switch (req.params.sort) {
-        case 'LA':
-            orderSQL = 'ORDER BY left_side ASC';
-            break;
-        case 'LD':
-            orderSQL = 'ORDER BY left_side DESC';
-            break;
-        case 'RA':
-            orderSQL = 'ORDER BY right_side ASC';
-            break;
-        case 'RD':
-            orderSQL = 'ORDER BY right_side DESC';
-            break;
-        case 'BA':
-            orderSQL = 'ORDER BY (left_side + right_side) ASC';
-            break;
-        case 'BD':
-            orderSQL = 'ORDER BY (left_side + right_side) DESC';
-            break;
-        default:
-    }
-    sql += orderSQL;
-    con.query(sql, (err, result) => {
-        if (err) {
-            throw err;
-        }
-        res.json({
-            msg: 'OK',
-            dominos: result
-        })
-    })
-})
-
-app.get('/dominos/filter/:filter', (req, res) => {
-    let sql = `
-        SELECT *
-        FROM dices
-    `;
-    let filterSQL = '';
-    switch (req.params.filter) {
-        case 'SS':
-            filterSQL = 'WHERE left_side = right_side';
-            break;
-        case 'ES':
-            filterSQL = 'WHERE left_side = 0 OR right_side = 0';
-            break;
-        default:
-    }
-    sql += filterSQL;
-    con.query(sql, (err, result) => {
-        if (err) {
-            throw err;
-        }
-        res.json({
-            msg: 'OK',
-            dominos: result
-        })
-    })
-
-})
-
-
-app.get('/dominos', (req, res) => {
-    const sql = `
-        SELECT * 
-        FROM dices
+        SELECT time, likes 
+        FROM likes
+        WHERE id = 24
     `;
     con.query(sql, (err, result) => {
         if (err) {
@@ -216,7 +61,7 @@ app.get('/dominos', (req, res) => {
         }
         res.json({
             msg: 'OK',
-            dominos: result
+            likes: result
         })
     })
 })
